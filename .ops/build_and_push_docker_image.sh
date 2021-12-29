@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-if [[ "{$CIRCLE_BRANCH}x" == "masterx" ]]; then
+if [[ "${CIRCLE_BRANCH}x" = "masterx" ]]; then
   TAGNAME="latest"
 else
   TAGNAME="${CIRCLE_BRANCH}"
 fi
+
 export DOCKER_BUILDKIT=1
 UNAME="$DOCKERHUB_USERNAME"
 UPASS="$DOCKERHUB_PASS"
