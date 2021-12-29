@@ -23,7 +23,7 @@ jobs:
             bash .ops/build_and_push_docker_image.sh php
 workflows:
   version: 2
-  testing:
+  docker_images:
     jobs:
       - build_docker
 

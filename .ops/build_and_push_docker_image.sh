@@ -14,6 +14,7 @@ function docker_tag_exists() {
 }
 
 echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin;
-docker build --tag "byflou/$1:${TAGNAME}" --file Dockerfile ./$1
+pushd ./$1 
+docker build --tag "byflou/$1:${TAGNAME}" .
 
 docker push "byflou/$1:${TAGNAME}"
