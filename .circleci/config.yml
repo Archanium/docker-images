@@ -26,7 +26,11 @@ workflows:
   docker_images:
     jobs:
       - build_docker
-
-
+  build-nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+    jobs:
+      - build_docker
         
         
