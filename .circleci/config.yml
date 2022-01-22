@@ -10,7 +10,7 @@ jobs:
   build_docker:
     working_directory: ~/docker
     environment:
-      IMAGE_NAME: byflou/php
+      BUILDKIT_PROGRESS: plain
     machine:
       image: ubuntu-2004:202010-01
     steps:

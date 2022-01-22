@@ -11,7 +11,7 @@ UPASS="$DOCKERHUB_PASS"
 
 function docker_tag_exists() {
     TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${UNAME}'", "password": "'${UPASS}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
-    curl --silent -f --head -lL https://hub.docker.com/v2/repositories/$1/tags/$2/ > /dev/null
+    curl --silent -f --head -lL https://hub.docker.com/v2/repositories/$1/tags/$2/ -h "Authorization: bearer ${TOKEN}" > /dev/null
 }
 
 echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin;
