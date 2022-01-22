@@ -20,6 +20,7 @@ jobs:
       - run:
           name: "Build image and update docker image"
           command: |
+            bash .ops/snyk_accept.sh
             bash .ops/build_and_push_docker_image.sh php
 workflows:
   version: 2
