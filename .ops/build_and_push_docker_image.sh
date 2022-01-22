@@ -15,4 +15,5 @@ function docker_tag_exists() {
 }
 
 echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin;
-bash $1/build.sh $TAGNAME
+pushd $1 || exit 1;
+bash ./build.sh $TAGNAME
