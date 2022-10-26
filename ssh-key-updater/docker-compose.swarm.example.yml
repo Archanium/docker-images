@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  ssh-key-downloader:
+    image: archanium/ssh-key-downloader:latest
+    deploy:
+      mode: global
+      restart_policy:
+        condition: none
+      labels:
+        - "traefik.enable=false"
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=30 0 * * *"
+        - "swarm.cronjob.skip-running=true"
+        - "swarm.cronjob.registry-auth=true"
+    environment:
+      EXTRA_KEYS: "" #comma-separated list of ssh public keys
+      GITHUB_MEMBERS: "archanium" #comma-separated list of github user names
+      OUTPUT_FILE: "/workdir/ssh/authorized_keys"
+      OWNER: 1000
+    volumes:
+      - '/home/ubuntu/.ssh/:/workdir/ssh/'
