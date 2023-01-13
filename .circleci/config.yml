@@ -26,7 +26,9 @@ workflows:
   version: 2
   docker_images:
     jobs:
-      - build_docker
+      - build_docker:
+          context:
+            - docker_auth
   
   build-nightly:
     triggers:
@@ -37,6 +39,9 @@ workflows:
               only:
                 - /.+/
     jobs:
-      - build_docker
+      - build_docker:
+          context:
+            - docker_auth
+
         
         
