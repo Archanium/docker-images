@@ -12,7 +12,7 @@ jobs:
     environment:
       BUILDKIT_PROGRESS: plain
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2204:2022.10.2
     steps:
       - checkout
       - add_ssh_keys
