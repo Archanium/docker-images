@@ -14,6 +14,5 @@ function docker_tag_exists() {
     curl --silent -f --head -lL https://hub.docker.com/v2/repositories/$1/tags/$2/ -h "Authorization: bearer ${TOKEN}" > /dev/null
 }
 
-echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin;
 pushd $1 || exit 1;
 bash ./build.sh $TAGNAME
