@@ -17,5 +17,5 @@ docker build --tag "byflou/${PROJECT}:php8.0${POSTFIX}" --tag "ghcr.io/archanium
 # else
 #   echo "Not scanning any images"
 # fi
-docker push --all-tags "ghcr.io/archanium/${PROJECT}"
+#docker push --all-tags "ghcr.io/archanium/${PROJECT}"
 docker push --all-tags "byflou/${PROJECT}"
