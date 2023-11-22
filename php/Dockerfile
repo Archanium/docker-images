@@ -38,7 +38,7 @@ ENV MEMCACHED_DEPS zlib1g-dev libmemcached-dev libsasl2-dev
 RUN set -xe \
     && apt-get update && apt-get install -y  $MEMCACHED_DEPS libmemcached11 zlib1g \
     && pecl channel-update pecl.php.net \
-    && pecl install --configureoptions='enable-memcached-igbinary="yes"'  memcached \
+    && pecl install --configureoptions='enable-memcached-igbinary="yes" enable-memcached-msgpack="yes"'  memcached \
     && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/20_memcached.ini \
     && rm -rf /var/lib/apt/lists/*
     
