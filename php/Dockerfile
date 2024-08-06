@@ -64,7 +64,7 @@ RUN set -eux; { \
 RUN set -eux; rm /usr/local/etc/php-fpm.d/*.conf
 ## MONGODB
 RUN set -xe \
-    && apt update -y && apt-get install libssl-dev -y \
+    && apt update -y && apt-get install libssl-dev libzstd-dev -y \
     && pecl channel-update pecl.php.net \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
