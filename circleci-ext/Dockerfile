@@ -9,7 +9,7 @@ RUN sudo docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 RUN sudo pecl channel-update pecl.php.net
 RUN printf "\n" | sudo pecl install memcached
 RUN sudo docker-php-ext-install zip pdo pdo_mysql soap intl xml bcmath pcntl gd
-RUN sudo pecl install mongodb pcov apcu
-RUN sudo docker-php-ext-enable mongodb zip pdo pdo_mysql soap intl xml memcached pcov bcmath apcu gd
+RUN sudo pecl install mongodb-1.20.1 pcov apcu
+RUN sudo docker-php-ext-enable zip pdo pdo_mysql soap intl xml memcached pcov bcmath apcu gd
 RUN echo "[PHP]\\ndate.timezone=UTC" | sudo tee -a /usr/local/etc/php/conf.d/tzone.ini
 CMD ["/bin/sh"]

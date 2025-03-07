@@ -66,7 +66,7 @@ RUN set -eux; rm /usr/local/etc/php-fpm.d/*.conf
 RUN set -xe \
     && apt update -y && apt-get install libssl-dev libzstd-dev -y \
     && pecl channel-update pecl.php.net \
-    && pecl install mongodb \
+    && pecl install mongodb-1.20.1 \
     && docker-php-ext-enable mongodb \
     && rm -rf /var/lib/apt/lists/*
 ## MYSQL
