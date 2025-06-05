@@ -33,13 +33,37 @@ RUN set -xe \
     && pecl install msgpack \
     && docker-php-ext-enable msgpack
 ## MEMCACHED
-ENV MEMCACHED_DEPS zlib1g-dev libmemcached-dev libsasl2-dev
-RUN set -xe \
-    && apt-get update && apt-get install -y  $MEMCACHED_DEPS libmemcached11 zlib1g \
-    && pecl channel-update pecl.php.net \
-    && pecl install --configureoptions='enable-memcached-igbinary="yes" enable-memcached-msgpack="yes"'  memcached \
-    && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/20_memcached.ini \
-    && rm -rf /var/lib/apt/lists/*
+ARG PHPEXT_MEMCACHED_VERSION=3.3.0
+RUN set -eux; \
+  persistentDeps=" \
+    libmemcached11 \
+    libmemcachedutil2 \
+    libzip4 \
+    zlib1g \
+  "; \
+  buildDeps=" \
+    libmemcached-dev \
+    libssl-dev \
+    libzip-dev \
+    zlib1g-dev \
+  "; \
+  DEBIAN_FRONTEND=noninteractive apt-get update; \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ${persistentDeps} \
+    ${buildDeps} \
+  ; \
+  \
+  pecl bundle -d /usr/src/php/ext memcached-${PHPEXT_MEMCACHED_VERSION}; \
+  docker-php-ext-configure memcached --enable-memcached-igbinary="yes" --enable-memcached-msgpack="yes"; \
+  docker-php-ext-install -j$(nproc) memcached; \
+  \
+  DEBIAN_FRONTEND=noninteractive apt-get purge -y --auto-remove \
+    -o APT::AutoRemove::RecommendsImportant=false \
+    -o APT::AutoRemove::SuggestsImportant=false \
+    ${buildDeps} \
+  ; \
+  docker-php-source delete; \
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
 ## APCU
 RUN set -xe \

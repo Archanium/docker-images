@@ -8,6 +8,7 @@ if  [[ "${LATEST_TAG}x" = "x" || "${LATEST_TAG}x" = "latestx"  ]]; then
 fi
 echo "PostFix: $POSTFIX";
 docker build --tag "byflou/${PROJECT}:php8.0${POSTFIX}" --tag "ghcr.io/archanium/${PROJECT}:php8.0${POSTFIX}" --build-arg PHP_VERSION=8.0-fpm .
+docker build --tag "byflou/${PROJECT}:php8.3${POSTFIX}" --tag "ghcr.io/archanium/${PROJECT}:php8.3${POSTFIX}" --build-arg PHP_VERSION=8.3-fpm . -f 8.3.Dockerfile
 #docker build --tag "byflou/${PROJECT}:php8.1${POSTFIX}" --build-arg PHP_VERSION=8.1-fpm --tag "byflou/${PROJECT}:${LATEST_TAG}" .
 # if [[ "${SNYK_TOKEN}x" != "x" ]]; then
 #   echo "Scanning: \"byflou/${PROJECT}:php8.0${POSTFIX}\""
