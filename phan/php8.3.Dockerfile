@@ -1,4 +1,4 @@
-FROM php:8.3-cli
+FROM php:8.3-bookworm-cli
 RUN pecl install ast && docker-php-ext-enable ast;
 RUN pecl install mongodb && docker-php-ext-enable mongodb;
 RUN apt-get update && \

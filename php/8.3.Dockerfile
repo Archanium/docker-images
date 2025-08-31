@@ -1,5 +1,5 @@
 ARG PHP_VERSION=8.0-fpm
-FROM php:$PHP_VERSION as php-with-dependencies
+FROM php:$PHP_VERSION AS php-with-dependencies
 WORKDIR /usr/src/app
 RUN mkdir -p /usr/local/etc/php/conf.d
 RUN docker-php-ext-install \
@@ -79,7 +79,7 @@ RUN set -xe \
     && docker-php-ext-install pcntl \
     && docker-php-ext-enable pcntl
 
-ENV DOCKER true
+ENV DOCKER=true
 RUN set -eux; { \
     echo "[PHP]"; \
     echo "date.timezone=UTC"; \
