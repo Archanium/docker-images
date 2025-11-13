@@ -16,7 +16,9 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys
-      - docker/install-docker
+      - docker/install-docker:
+          version: "v28.5.2":
+          version: "v28.5.2"
       - run:
           name: "Authorize docker"
           command: |
@@ -34,7 +36,8 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys
-      - docker/install-docker
+      - docker/install-docker:
+          version: "v28.5.2"
       - run: 
           name: "Authorize docker"
           command: |
@@ -53,7 +56,8 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys
-      - docker/install-docker
+      - docker/install-docker:
+          version: "v28.5.2"
       - run: 
           name: "Authorize docker"
           command: |
