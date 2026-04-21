@@ -17,7 +17,6 @@ jobs:
       - checkout
       - add_ssh_keys
       - docker/install-docker:
-          version: "v28.5.2":
           version: "v28.5.2"
       - run:
           name: "Authorize docker"
