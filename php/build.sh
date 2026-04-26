@@ -7,16 +7,6 @@ if  [[ "${LATEST_TAG}x" = "x" || "${LATEST_TAG}x" = "latestx"  ]]; then
   POSTFIX=""
 fi
 echo "PostFix: $POSTFIX";
-docker build --tag "byflou/${PROJECT}:php8.0${POSTFIX}" --tag "ghcr.io/archanium/${PROJECT}:php8.0${POSTFIX}" --build-arg PHP_VERSION=8.0-fpm .
-docker build --tag "byflou/${PROJECT}:php8.3${POSTFIX}" --tag "ghcr.io/archanium/${PROJECT}:php8.3${POSTFIX}" --build-arg PHP_VERSION=8.3-fpm-bookworm . -f 8.3.Dockerfile
-#docker build --tag "byflou/${PROJECT}:php8.1${POSTFIX}" --build-arg PHP_VERSION=8.1-fpm --tag "byflou/${PROJECT}:${LATEST_TAG}" .
-# if [[ "${SNYK_TOKEN}x" != "x" ]]; then
-#   echo "Scanning: \"byflou/${PROJECT}:php8.0${POSTFIX}\""
-#   #docker scan --file ./Dockerfile --exclude-base "byflou/${PROJECT}:php8.0${POSTFIX}"
-#   echo "Scanning: \"byflou/${PROJECT}:php8.1${POSTFIX}\""
-#   #docker scan --file ./Dockerfile --exclude-base "byflou/${PROJECT}:php8.1${POSTFIX}"
-# else
-#   echo "Not scanning any images"
-# fi
-#docker push --all-tags "ghcr.io/archanium/${PROJECT}"
+docker buildx build --cache-from type=registry,ref=byflou/${PROJECT}:8.0-buildcache --cache-to type=registry,ref=archanium/${PROJECT}:8.0-buildcache,mode=max --tag "byflou/${PROJECT}:php8.0${POSTFIX}" --tag "ghcr.io/archanium/${PROJECT}:php8.0${POSTFIX}" --build-arg PHP_VERSION=8.0-fpm .
+docker buildx build --cache-from type=registry,ref=byflou/${PROJECT}:8.-buildcache --cache-to type=registry,ref=archanium/${PROJECT}:8.3-buildcache,mode=max --tag "byflou/${PROJECT}:php8.3${POSTFIX}" --tag "ghcr.io/archanium/${PROJECT}:php8.3${POSTFIX}" --build-arg PHP_VERSION=8.3-fpm-bookworm . -f 8.3.Dockerfile
 docker push --all-tags "byflou/${PROJECT}"

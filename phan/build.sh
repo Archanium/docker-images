@@ -12,6 +12,6 @@ docker buildx create --use
 docker buildx inspect --bootstrap
 docker buildx build --platform linux/amd64,linux/arm64/v8 \
               --tag "archanium/${PROJECT}:8.3${POSTFIX}" \
-              --cache-from type=registry,ref=your-archanium/${PROJECT}:8.3-buildcache
-              --cache-to type=registry,ref=your-archanium/${PROJECT}:8.3-buildcache,mode=max
+              --cache-from type=registry,ref=your-archanium/${PROJECT}:8.3-buildcache \
+              --cache-to type=registry,ref=your-archanium/${PROJECT}:8.3-buildcache,mode=max \
               -f php8.3.Dockerfile --push .
