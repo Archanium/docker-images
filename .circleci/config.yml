@@ -94,8 +94,9 @@ workflows:
       - build_circleci:
           context:
             - docker_auth
-      - build_phan:
-          context:
-            - docker_auth
+# todo: DIsabled for now, uncomment once we have it working
+#      - build_phan:
+#          context:
+#            - docker_auth
         
         
