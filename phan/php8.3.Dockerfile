@@ -3,25 +3,32 @@
 # ==========================================
 FROM php:8.3-cli-bookworm AS builder
 
-# 1. Install heavy build dependencies (-dev packages)
+# Chunk 1: System Dependencies (Rarely change)
 RUN apt-get update && apt-get install -y \
     git libzip-dev unzip libmemcached-dev libz-dev libxml2-dev \
     libc-client-dev libkrb5-dev libfreetype6-dev libjpeg62-turbo-dev \
     libpng-dev libwebp-dev
 
-# 2. Compile PECL extensions
-RUN pecl install ast mongodb igbinary memcached apcu
+# Chunk 2: Lightweight PECL extensions
+RUN pecl install ast igbinary apcu
 
-# 3. Compile Core extensions
+# Chunk 3: Heavy/C-compiled PECL extensions (Isolate the slow ones)
+RUN pecl install memcached
+RUN pecl install mongodb
+
+# Chunk 4: Core PHP extensions
 RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     docker-php-ext-configure soap && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
-    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp && \
-    docker-php-ext-install intl soap pdo pdo_mysql zip bcmath imap gd
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+RUN docker-php-ext-install intl bcmath soap
+RUN docker-php-ext-install imap
+RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install gd
 
-# 4. Enable PECL extensions so the .ini files are generated
-RUN docker-php-ext-enable ast mongodb igbinary memcached apcu
-
+# Chunk 5: Enable all (Fast layer)
+RUN docker-php-ext-enable ast igbinary apcu mongodb memcached
 
 # ==========================================
 # STAGE 2: Final Runtime Image
