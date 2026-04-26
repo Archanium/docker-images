@@ -22,31 +22,34 @@ RUN install-php-extensions pdo_mysql
 RUN install-php-extensions soap
 RUN install-php-extensions zip
 
+# 3. Dynamically calculate required runtime APT packages!
+# This finds all shared library dependencies and maps them to Debian packages.
+RUN find /usr/local/lib/php/extensions -type f -name '*.so' -exec ldd {} + \
+    | awk '/=>/ { print $3 }' \
+    | grep -v '^$' \
+    | sort -u \
+    | xargs -r dpkg -S 2>/dev/null \
+    | cut -d':' -f1 \
+    | sort -u > /tmp/runtime-deps.txt
+
 
 # ==========================================
 # STAGE 2: Final Runtime Image
 # ==========================================
 FROM php:8.3-cli-bookworm
 
-# 1. Install ONLY the runtime Linux dependencies required by the extensions above.
-# (These are the lightweight versions, NOT the heavy -dev packages)
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libmemcached11 \
-    libzip4 \
-    libxml2 \
-    libc-client2007e \
-    libfreetype6 \
-    libjpeg62-turbo \
-    libpng16-16 \
-    libwebp7 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# 1. Copy the calculated dependency list from the builder
+COPY --from=builder /tmp/runtime-deps.txt /tmp/runtime-deps.txt
 
-# 2. Copy the compiled extensions (.so files) from the builder
+# 2. Install basic utils AND the dynamically calculated runtime packages
+# (We use xargs to pass the contents of the text file directly to apt-get)
+RUN apt-get update && \
+    apt-get install -y git unzip && \
+    cat /tmp/runtime-deps.txt | xargs apt-get install -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && rm /tmp/runtime-deps.txt
+
+# 3. Copy the compiled extensions and configuration from the builder
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
-
-# 3. Copy the configuration files (.ini files) that actually enable them
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
 # 4. Install Phan
