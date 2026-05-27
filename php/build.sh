@@ -9,5 +9,5 @@ fi
 echo "PostFix: $POSTFIX";
 docker buildx create --use
 docker buildx build --cache-from type=registry,ref=archanium/${PROJECT}:8.0-buildcache --cache-to type=registry,ref=archanium/${PROJECT}:8.0-buildcache,mode=max --tag "byflou/${PROJECT}:php8.0${POSTFIX}" --push --build-arg PHP_VERSION=8.0-fpm .
-docker buildx build --cache-from type=registry,ref=archanium/${PROJECT}:8.1-buildcache --cache-to type=registry,ref=archanium/${PROJECT}:8.1-buildcache,mode=max --tag "byflou/${PROJECT}:php8.1${POSTFIX}" --push --build-arg PHP_VERSION=8.1-fpm .
+docker buildx build --cache-from type=registry,ref=archanium/${PROJECT}:8.1-buildcache --cache-to type=registry,ref=archanium/${PROJECT}:8.1-buildcache,mode=max --tag "byflou/${PROJECT}:php8.1${POSTFIX}" --push --build-arg PHP_VERSION=8.1-fpm-bookworm . -f 8.3.Dockerfile
 docker buildx build --cache-from type=registry,ref=archanium/${PROJECT}:8.3-buildcache --cache-to type=registry,ref=archanium/${PROJECT}:8.3-buildcache,mode=max --tag "byflou/${PROJECT}:php8.3${POSTFIX}" --push --build-arg PHP_VERSION=8.3-fpm-bookworm . -f 8.3.Dockerfile
