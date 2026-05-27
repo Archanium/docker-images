@@ -16,15 +16,15 @@ docker buildx build \
 docker buildx build \
    --cache-from type=registry,ref=archanium/dreamshop-php:8.1-buildcache \
    --cache-to type=registry,ref=archanium/dreamshop-php:8.1-buildcache,mode=max \
-   --arg PHP_VERSION=8.1 \
+   --build-arg PHP_VERSION=8.1 \
    --tag "archanium/dreamshop-php:8.1" --push --file Dockerfile  .
 docker buildx build \
    --cache-from type=registry,ref=archanium/dreamshop-php:8.1-browsers-buildcache \
    --cache-to type=registry,ref=archanium/dreamshop-php:8.1-browsers-buildcache,mode=max \
-   --arg PHP_VERSION=8.1-browsers \
+   --build-arg PHP_VERSION=8.1-browsers \
    --tag "archanium/dreamshop-php:8.1-browsers" --push --file browsers.Dockerfile  .
 docker buildx build \
    --cache-from type=registry,ref=archanium/dreamshop-builder:8.1-buildcache \
    --cache-to type=registry,ref=archanium/dreamshop-builder:8.1-buildcache,mode=max \
-   --arg PHP_VERSION=8.1-browsers \
+   --build-arg PHP_VERSION=8.1-browsers \
    --tag "archanium/dreamshop-builder:8.1" --push --file builder.Dockerfile  .

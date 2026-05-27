@@ -1,7 +1,7 @@
 ARG PHP_VERSION=8.0-browsers
 FROM cimg/php:$PHP_VERSION
 RUN sudo apt update || exit 0
-RUN sudo apt install libxml2-dev libzip-dev libwebp-dev libjpeg-dev libpng-dev libz-dev libxpm-dev libmcrypt-dev libssl-dev mariadb-client libicu-dev openssl libmemcached-dev
+RUN sudo apt install libxml2-dev libtiff-dev libfreetype-dev  libzip-dev libwebp-dev libjpeg-dev libpng-dev libz-dev libxpm-dev libmcrypt-dev libssl-dev mariadb-client libicu-dev openssl libmemcached-dev
 RUN sudo pecl channel-update pecl.php.net
 RUN printf "\n" | sudo pecl install memcached
 RUN sudo docker-php-ext-install zip pdo pdo_mysql soap intl xml bcmath pcntl gd
