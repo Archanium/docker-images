@@ -1,4 +1,5 @@
-FROM cimg/php:8.0.28-browsers
+ARG PHP_VERSION=8.0-browsers
+FROM cimg/php:$PHP_VERSION
 RUN sudo apt update && sudo apt install libxml2-dev libzip-dev libwebp-dev libjpeg-dev libpng-dev libz-dev libxpm-dev libmcrypt-dev libssl-dev mariadb-client libicu-dev openssl libmemcached-dev
 RUN sudo apt-get update && sudo apt-get install -y libc-client-dev libkrb5-dev && sudo rm -r /var/lib/apt/lists/*
 RUN sudo docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
