@@ -76,9 +76,6 @@ workflows:
       - build_php:
           context:
             - docker_auth
-      - build_phan:
-          context:
-            - docker_auth
   build-nightly:
     triggers:
       - schedule:

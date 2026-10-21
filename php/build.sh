@@ -8,5 +8,5 @@ if  [[ "${LATEST_TAG}x" = "x" || "${LATEST_TAG}x" = "latestx"  ]]; then
 fi
 echo "PostFix: $POSTFIX";
 docker buildx create --use
-docker buildx build --pull --output "type=image,store=true,name=docker.io/library/php:8.3.36-fpm-bookworm" "https://github.com/docker-library/php.git#e3eaff845f7a9f7259c31da54dce0320b47a3bbd:8.3/bookworm/fpm"
+docker buildx build --pull --output "type=image,store=true" -t php:8.3.36-fpm-bookworm "https://github.com/docker-library/php.git#e3eaff845f7a9f7259c31da54dce0320b47a3bbd:8.3/bookworm/fpm"
 docker buildx build --cache-from type=registry,ref=archanium/${PROJECT}:8.3-buildcache --cache-to type=registry,ref=archanium/${PROJECT}:8.3-buildcache,mode=max --tag "byflou/${PROJECT}:php8.3${POSTFIX}" --push --build-arg PHP_VERSION=8.3.36-fpm-bookworm . -f 8.3.Dockerfile
