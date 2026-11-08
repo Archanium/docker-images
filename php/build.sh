@@ -16,7 +16,7 @@ case "$ARCH" in
   amd64|arm64)
     docker buildx create --use
     #docker buildx build --pull --output "type=image,store=true" -t php:8.3.36-fpm-bookworm "https://github.com/docker-library/php.git#e3eaff845f7a9f7259c31da54dce0320b47a3bbd:8.3/bookworm/fpm"
-    docker buildx build --platform "linux/${ARCH}" --cache-from "type=registry,ref=archanium/${PROJECT}:8.3-buildcache-${ARCH}" --cache-to "type=registry,ref=archanium/${PROJECT}:8.3-buildcache-${ARCH},mode=max" --tag "${IMAGE}-${ARCH}" --push --build-arg PHP_VERSION=8.3.36-fpm-bookworm . -f 8.3.Dockerfile
+    docker buildx build --pull --platform "linux/${ARCH}" --cache-from "type=registry,ref=archanium/${PROJECT}:8.3-buildcache-${ARCH}" --cache-to "type=registry,ref=archanium/${PROJECT}:8.3-buildcache-${ARCH},mode=max" --tag "${IMAGE}-${ARCH}" --push --build-arg PHP_VERSION=8.3-fpm-bookworm . -f 8.3.Dockerfile
     ;;
   manifest)
     docker buildx imagetools create --tag "${IMAGE}" "${IMAGE}-amd64" "${IMAGE}-arm64"
