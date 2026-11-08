@@ -26,7 +26,7 @@ jobs:
           name: "Build image and update docker image"
           command: |
             bash .ops/build_and_push_docker_image.sh phan
-  build_php:
+  build_php_amd64:
     working_directory: ~/docker
     environment:
       BUILDKIT_PROGRESS: plain
@@ -37,14 +37,48 @@ jobs:
       - add_ssh_keys
       - docker/install-docker:
           version: "v28.5.2"
-      - run: 
+      - run:
           name: "Authorize docker"
           command: |
             bash .ops/docker_auth.sh
       - run:
           name: "Build image and update docker image"
           command: |
-            bash .ops/build_and_push_docker_image.sh php
+            bash .ops/build_and_push_docker_image.sh php amd64
+  build_php_arm64:
+    working_directory: ~/docker
+    environment:
+      BUILDKIT_PROGRESS: plain
+    machine:
+      image: ubuntu-2204:current
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - add_ssh_keys
+      - run:
+          name: "Authorize docker"
+          command: |
+            bash .ops/docker_auth.sh
+      - run:
+          name: "Build image and update docker image"
+          command: |
+            bash .ops/build_and_push_docker_image.sh php arm64
+  publish_php:
+    working_directory: ~/docker
+    machine:
+      image: ubuntu-2204:2022.10.2
+    steps:
+      - checkout
+      - docker/install-docker:
+          version: "v28.5.2"
+      - run:
+          name: "Authorize docker"
+          command: |
+            bash .ops/docker_auth.sh
+      - run:
+          name: "Publish multi-arch manifest"
+          command: |
+            bash .ops/build_and_push_docker_image.sh php manifest
   build_circleci:
     working_directory: ~/docker
     environment:
@@ -73,9 +107,18 @@ workflows:
       - build_circleci:
           context:
             - docker_auth
-      - build_php:
+      - build_php_amd64:
           context:
             - docker_auth
+      - build_php_arm64:
+          context:
+            - docker_auth
+      - publish_php:
+          context:
+            - docker_auth
+          requires:
+            - build_php_amd64
+            - build_php_arm64
   build-nightly:
     triggers:
       - schedule:
@@ -85,9 +128,18 @@ workflows:
               only:
                 - /master/
     jobs:
-      - build_php:
+      - build_php_amd64:
           context:
             - docker_auth
+      - build_php_arm64:
+          context:
+            - docker_auth
+      - publish_php:
+          context:
+            - docker_auth
+          requires:
+            - build_php_amd64
+            - build_php_arm64
       - build_circleci:
           context:
             - docker_auth
