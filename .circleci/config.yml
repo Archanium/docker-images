@@ -42,7 +42,12 @@ jobs:
           command: |
             bash .ops/docker_auth.sh
       - run:
+          name: "Set up QEMU for arm64"
+          command: |
+            docker run --privileged --rm tonistiigi/binfmt:qemu-v10.2.3 --install arm64
+      - run:
           name: "Build image and update docker image"
+          no_output_timeout: 60m
           command: |
             bash .ops/build_and_push_docker_image.sh php
   build_circleci:

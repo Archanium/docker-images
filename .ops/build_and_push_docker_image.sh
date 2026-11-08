@@ -2,7 +2,8 @@
 if [[ "${CIRCLE_BRANCH}x" = "masterx" ]]; then
   TAGNAME="latest"
 else
-  TAGNAME="${CIRCLE_BRANCH}"
+  # Docker tags cannot contain "/", so feature/foo becomes feature-foo
+  TAGNAME="${CIRCLE_BRANCH//\//-}"
 fi
 
 export DOCKER_BUILDKIT=1
