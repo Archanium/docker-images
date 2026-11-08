@@ -16,4 +16,4 @@ function docker_tag_exists() {
 }
 
 pushd $1 || exit 1;
-bash ./build.sh $TAGNAME
+bash ./build.sh $TAGNAME "${@:2}"
